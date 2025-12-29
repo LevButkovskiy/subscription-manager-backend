@@ -1,4 +1,4 @@
-import { USER_SERVICE_TOKEN } from '@/common/tokens';
+import { USER_SERVICE_TOKEN, USERS_CLIENT_TOKEN } from '@/common/tokens';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -14,7 +14,7 @@ import configuration, { TConfiguration } from './config/configuration';
     }),
     ClientsModule.registerAsync([
       {
-        name: 'USERS_CLIENT',
+        name: USERS_CLIENT_TOKEN,
         imports: [ConfigModule],
         useFactory: (configService: ConfigService<TConfiguration>) => ({
           transport: Transport.TCP,

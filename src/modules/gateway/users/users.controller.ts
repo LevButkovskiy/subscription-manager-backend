@@ -1,18 +1,17 @@
 import { CreateUserDto, FindOneDto } from '@/common/dto/users';
-import { Body, Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @MessagePattern('findOne')
-  async findOne(@Body() body: FindOneDto) {
-    return this.usersService.findOne(body);
+  @Get('findOne')
+  async findOne(@Query() query: FindOneDto) {
+    return this.usersService.findOne(query);
   }
 
-  @MessagePattern('create')
+  @Post('create')
   async create(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
   }

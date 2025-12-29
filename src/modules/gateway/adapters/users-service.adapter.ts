@@ -13,7 +13,7 @@ export class UsersServiceAdapter implements IUserService {
     @Inject(USERS_CLIENT_TOKEN) private readonly usersClient: ClientProxy,
   ) {}
 
-  async findOne(body: FindOneDto) {
+  async findOne(body: FindOneDto): Promise<FindOneResponse> {
     return firstValueFrom<FindOneResponse>(
       this.usersClient.send('findOne', body),
     );

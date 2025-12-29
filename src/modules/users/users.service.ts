@@ -1,4 +1,5 @@
-import { FindOneDto } from '@/common/dto/users';
+import { CreateUserDto, FindOneDto } from '@/common/dto/users';
+import { ISafeUser } from '@/common/interfaces/users/safe-user.interface';
 import { IUserService } from '@/common/interfaces/users/users-service.interface';
 import { FindOneResponse } from '@/common/responses/users';
 import { Injectable } from '@nestjs/common';
@@ -18,5 +19,16 @@ export class UsersService implements IUserService {
       where: { email: body.email },
     });
     return user;
+  }
+
+  async create(body: CreateUserDto): Promise<ISafeUser> {
+    const user = this.userRepository.create({
+      email: body.email,
+      password: body.password,
+    });
+    const savedUser = await this.userRepository.save(user);
+
+    const { password, ...userWithoutPassword } = savedUser;
+    return userWithoutPassword;
   }
 }
