@@ -1,10 +1,10 @@
 import { LoginDto, RegisterDto } from '@/common/dto/auth';
 import { IAuthService } from '@/common/interfaces/auth/auth-service.interface';
 import { ISafeUser } from '@/common/interfaces/users/safe-user.interface';
+import { sendToMicroservice } from '@/common/lib/rpc-exception-handler';
 import { AUTH_CLIENT_TOKEN } from '@/common/tokens';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthServiceAdapter implements IAuthService {
@@ -13,10 +13,10 @@ export class AuthServiceAdapter implements IAuthService {
   ) {}
 
   async register(body: RegisterDto): Promise<ISafeUser> {
-    return firstValueFrom<ISafeUser>(this.authClient.send('register', body));
+    return sendToMicroservice<ISafeUser>(this.authClient, 'register', body);
   }
 
   async login(body: LoginDto): Promise<ISafeUser> {
-    return firstValueFrom<ISafeUser>(this.authClient.send('login', body));
+    return sendToMicroservice<ISafeUser>(this.authClient, 'login', body);
   }
 }

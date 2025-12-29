@@ -1,11 +1,11 @@
 import { CreateUserDto, FindOneDto } from '@/common/dto/users';
 import { ISafeUser } from '@/common/interfaces/users/safe-user.interface';
 import type { IUserService } from '@/common/interfaces/users/users-service.interface';
-import { FindOneResponse } from '@/common/responses/users';
+import { sendToMicroservice } from '@/common/lib/rpc-exception-handler';
+import { FindOneResponse, FindOneSafeResponse } from '@/common/responses/users';
 import { USERS_CLIENT_TOKEN } from '@/common/tokens';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UsersServiceAdapter implements IUserService {
@@ -14,12 +14,22 @@ export class UsersServiceAdapter implements IUserService {
   ) {}
 
   async findOne(body: FindOneDto) {
-    return firstValueFrom<FindOneResponse>(
-      this.usersClient.send('findOne', body),
+    return sendToMicroservice<FindOneResponse>(
+      this.usersClient,
+      'findOne',
+      body,
+    );
+  }
+
+  async findOneSafe(body: FindOneDto): Promise<FindOneSafeResponse> {
+    return sendToMicroservice<FindOneSafeResponse>(
+      this.usersClient,
+      'findOneSafe',
+      body,
     );
   }
 
   async create(body: CreateUserDto): Promise<ISafeUser> {
-    return firstValueFrom<ISafeUser>(this.usersClient.send('create', body));
+    return sendToMicroservice<ISafeUser>(this.usersClient, 'create', body);
   }
 }

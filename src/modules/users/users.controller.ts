@@ -12,6 +12,11 @@ export class UsersController {
     return this.usersService.findOne(body);
   }
 
+  @MessagePattern('findOneSafe')
+  async findOneSafe(@Body() body: FindOneDto) {
+    return this.usersService.findOneSafe(body);
+  }
+
   @MessagePattern('create')
   async create(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
