@@ -1,10 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
+import { JwtAuthGuard } from './modules/gateway/auth/guards/jwt-auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -13,6 +17,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   const microservicePort = process.env.MICROSERVICE_PORT
     ? parseInt(process.env.MICROSERVICE_PORT, 10)
