@@ -13,7 +13,7 @@ export class AuthService implements IAuthService {
   ) {}
 
   async register(body: RegisterDto): Promise<ISafeUser> {
-    if (body.password !== body.passwordConfirmation) {
+    if (body.password !== body.confirmPassword) {
       throw new RpcException({
         status: 400,
         message: 'Пароли не совпадают',

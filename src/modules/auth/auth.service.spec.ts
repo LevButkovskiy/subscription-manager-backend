@@ -40,7 +40,7 @@ describe('AuthService', () => {
     const validRegisterDto: RegisterDto = {
       email: 'test@example.com',
       password: 'password123',
-      passwordConfirmation: 'password123',
+      confirmPassword: 'password123',
     };
 
     it('должен успешно зарегистрировать нового пользователя', async () => {
@@ -92,7 +92,7 @@ describe('AuthService', () => {
       const registerDtoWithMismatchedPasswords: RegisterDto = {
         email: 'test@example.com',
         password: 'password123',
-        passwordConfirmation: 'differentPassword',
+        confirmPassword: 'differentPassword',
       };
 
       await expect(
