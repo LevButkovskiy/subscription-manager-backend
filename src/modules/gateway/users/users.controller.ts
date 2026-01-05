@@ -2,7 +2,6 @@ import { CreateUserDto, FindOneDto } from '@/common/dto/users';
 import {
   Body,
   Controller,
-  Get,
   NotFoundException,
   Post,
   Request,
@@ -15,7 +14,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('me')
+  @Post('me')
   async me(@Request() req: ExpressRequest) {
     const userId = (req.user as { userId: string })?.userId;
     if (!userId) {
